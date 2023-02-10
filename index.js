@@ -9,21 +9,40 @@ app.get('/', (req, res) => {
 })
 
 app.get('/generate', (req, res) => {
-  const { bin, n } = req.query
-  if (!bin || !n) return res.status(400).json({ ok: false, result: "Bad Request: Bin & n Paramer is Not Found!" })
-  const result = []
-  for (let i = 0; i < n; i++){
-    const card = cardGenerator(bin)
-    result.push({
-      bin,
-      length: String(card.cardNum).length,
-      card
+  const { bin, n, fmt } = req.query
+  if (!bin || !n || !fmt) return res.status(400).json({ ok: false, result: "Bad Request: Bin & n & fmt Paramer is Not Found!" })
+  if (fmt === 'json'){
+    const result = []
+    for (let i = 0; i < n; i++){
+      const card = cardGenerator(bin)
+      result.push({
+        bin,
+        length: String(card.cardNum).length,
+        card
+      })
+    }
+    res.json({
+      ok: true,
+      result
+    })
+  } else if (fmt === 'pipe'){
+    const result = []
+    for (let i = 0;  i < n; i++){
+      const card = cardGenerator(bin)
+      const [year, month] = card.yearAndMonth
+      const format = `${card.cardNum}|${month}|20${year}|${card.cvv}`
+      result.push(format)
+    }
+    res.json({
+      ok: true,
+      result
+    })
+  } else {
+    res.status(400).json({
+      ok: false,
+      result: 'Bad Request: fmt is Wrong! use: json | pipe'
     })
   }
-  res.json({
-    ok: true,
-    result
-  })
 })
 
 app.listen(port, () => {
