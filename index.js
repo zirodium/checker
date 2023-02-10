@@ -33,10 +33,7 @@ app.get('/generate', (req, res) => {
       const format = `${card.cardNum}|${month}|20${year}|${card.cvv}`
       result.push(format)
     }
-    res.json({
-      ok: true,
-      result
-    })
+    res.send(result.join("\n"))
   } else {
     res.status(400).json({
       ok: false,
