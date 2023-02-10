@@ -30,7 +30,7 @@ app.get('/generate', (req, res) => {
     for (let i = 0;  i < n; i++){
       const card = cardGenerator(bin)
       const [year, month] = card.yearAndMonth
-      const format = `${card.cardNum}|${month}|20${year}|${card.cvv}`
+      const format = `${card.cardNum}|${month}|20${year}|${card.cvv}|${card.pin}`
       result.push(format)
     }
     res.send(result.join("\n"))
