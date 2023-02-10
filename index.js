@@ -9,16 +9,20 @@ app.get('/', (req, res) => {
 })
 
 app.get('/generate', (req, res) => {
-  const { bin } = req.query
-  if (!bin) return res.status(400).json({ ok: false, result: "Bad Request: Bin Paramer is Not Found!" })
-  const card = cardGenerator(bin)
-  res.json({
-    ok: true,
-    result: {
+  const { bin, n } = req.query
+  if (!bin || !n) return res.status(400).json({ ok: false, result: "Bad Request: Bin & n Paramer is Not Found!" })
+  const result = []
+  for (let i = 0; i <= n; i++){
+    const card = cardGenerator(bin)
+    result.push({
       bin,
       length: String(card.cardNum).length,
       card
-    }
+    })
+  }
+  res.json({
+    ok: true,
+    result
   })
 })
 
